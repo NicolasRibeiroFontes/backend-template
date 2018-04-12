@@ -1,7 +1,7 @@
 const app = require('../src/app');
 const mongoose = require('mongoose');
-const mongoDB = 'mongodb://localhost/my_database';
-const port = normalizaPort(process.env.PORT || '3000');
+const urlMongoDB = 'mongodb://localhost/my_database';
+const port = normalizaPort(process.env.PORT || '3030');
 
 function normalizaPort(val) {
     const port = parseInt(val, 10);
@@ -22,7 +22,7 @@ app.listen(port, function () {
 })
 
 function startDb() {
-    mongoose.connect(mongoDB);
+    mongoose.connect(urlMongoDB);
     mongoose.Promise = global.Promise;
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'MongoDB connection error:'));

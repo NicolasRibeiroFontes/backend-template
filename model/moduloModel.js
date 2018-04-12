@@ -5,7 +5,8 @@ var moduloSchema = new Schema({
     ordem: { type: String, required: true },
     descricao: { type: String, required: true },
     state: { type: String, required: true },
-    icone: { type: String, required: true }
+    icone: { type: String, required: true },
+    sistemaID: {type: Number, default: 0}
 }, { collection: 'nf_modulos', versionKey: false });
 
 var ModuloModel = mongoose.model('ModuloModel', moduloSchema);  

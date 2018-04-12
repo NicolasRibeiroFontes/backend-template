@@ -2,7 +2,6 @@ var UsuarioModel = require('../../model/usuarioModel');
 var Usuario = new UsuarioModel();
 
 exports.salvarUsuario = (req, res, next) => {
-    console.log(req);
     Usuario = new UsuarioModel(req.body);
     Usuario.save();
     res.send('Usuario salvo com sucesso');
@@ -36,7 +35,15 @@ exports.buscarUsuarioPorEmail = (req, res, next) => {
 }
 
 exports.excluirUsuario = (req, res, next) => {
-    UsuarioModel.findOneAndRemove({_id: req.params.id}, function(erro,usuario){
+    UsuarioModel.findOneAndRemove({ _id: req.params.id }, function (erro, usuario) {
         res.send((!erro ? usuario : erro));
+    })
+}
+
+exports.logarUsuario = (req, res, next) => {
+    UsuarioModel.findOne({ email: req.body.login, senha: req.body.senha }, function (erro, usuario) {
+        res.send((!erro
+            ? (usuario ? { status: true, objeto: usuario } : { status: false, mensagem: "Usuário/Senha Incorretos" })
+            : { status: false, mensagem: "Não foi possível logar" }));
     })
 }

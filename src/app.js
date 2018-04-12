@@ -6,6 +6,13 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+app.all('*', function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Content-Length, Accept, my-header");
+    res.header("")
+    next();
+});
+
 //Rotas
 const index = require('./routes/index');
 const usuarioRoute = require('./routes/usuarioRoute');
