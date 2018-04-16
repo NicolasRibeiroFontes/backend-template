@@ -1,10 +1,21 @@
 var UsuarioModel = require('../../model/usuarioModel');
 var Usuario = new UsuarioModel();
 
+function validarCampo(campo) {
+    if (campo == '' || campo == null || campo == undefined)
+        return true;
+    else
+        return false;
+}
+
 exports.salvarUsuario = (req, res, next) => {
     Usuario = new UsuarioModel(req.body);
-    Usuario.save();
-    res.send('Usuario salvo com sucesso');
+    if (validarCampo(Usuario.nome) || validarCampo(Usuario.email) || validarCampo(Usuario.senha))
+        res.send({ status: false, mensagem: 'Há campos obrigatórios em branco!' });
+    else {
+        Usuario.save();
+        res.send({ status: true, mensagem: 'Usuário cadastrado com sucesso' });
+    }
 };
 
 exports.buscarTodosUsuarios = (req, res, next) => {
@@ -15,10 +26,14 @@ exports.buscarTodosUsuarios = (req, res, next) => {
 
 exports.editarUsuario = (req, res, next) => {
     Usuario = new UsuarioModel(req.body);
+
     UsuarioModel.findOneAndUpdate({ _id: req.params.id },
-        { $set: { nome: Usuario.nome, email: Usuario.email, senha: Usuario.senha } }, { new: true },
+        { $set: { nome: Usuario.nome, sobrenome: Usuario.sobrenome, dataNascimento: Usuario.dataNascimento, senha: Usuario.senha,
+        email: Usuario.email, telefone: Usuario.telefone, celular: Usuario.celular,
+        cep: Usuario.cep, endereco: Usuario.endereco, numero: Usuario.numero, complemento: Usuario.complemento,
+        bairro: Usuario.bairro, cidade: Usuario.cidade, estado: Usuario.estado } }, { new: true },
         function (erro, usuarioEditado) {
-            res.send((!erro ? usuarioEditado : erro));
+            res.send((!erro ? { status: true, mensagem: 'Usuário Editado com sucesso!' } : { status: false, mensagem: erro.message }));
         });
 }
 
@@ -36,7 +51,7 @@ exports.buscarUsuarioPorEmail = (req, res, next) => {
 
 exports.excluirUsuario = (req, res, next) => {
     UsuarioModel.findOneAndRemove({ _id: req.params.id }, function (erro, usuario) {
-        res.send((!erro ? usuario : erro));
+        res.send((!erro ? {status:true} : {status:false}));
     })
 }
 
